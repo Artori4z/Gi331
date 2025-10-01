@@ -11,7 +11,7 @@ public class Cube : MonoBehaviour
     public Transform endPoint;     // จุดทางขวา
     public float speed = 1f;       // ความเร็วการเคลื่อนที่
     private float t = 0f;
-
+    public float rayLength = 5f;
     [System.Obsolete]
     private void Start()
     {
@@ -25,10 +25,11 @@ public class Cube : MonoBehaviour
     {
         if (gamePlay.isMoving)
         {
-            transform.position -= new Vector3(0, Time.deltaTime *9.81f, 0);
+            transform.position -= new Vector3(0, Time.deltaTime * speedDown, 0);
         }
         else
         {
+            Debug.DrawRay(transform.position, Vector3.down * rayLength, Color.blue);
             // เพิ่มค่าเวลา (0 → 1)
             t += Time.deltaTime * speed;
 
