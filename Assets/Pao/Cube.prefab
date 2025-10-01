@@ -125,7 +125,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bba01c8262ea6f47afacd3e47f6d15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cube
+  speedDown: 5
+  startPoint: {fileID: 0}
+  midPoint: {fileID: 0}
+  endPoint: {fileID: 0}
   speed: 1
+  rayLength: 5
 --- !u!54 &5999966403396272713
 Rigidbody:
   m_ObjectHideFlags: 0
