@@ -407,6 +407,7 @@ MonoBehaviour:
   Cam: {fileID: 2049861570}
   cubeHeight: 0
   isMoving: 1
+  hascube: 0
   time: 2
   canSpawm: 1
   life: 0

@@ -11,7 +11,9 @@ public class Cube : MonoBehaviour
     public Transform endPoint;     // จุดทางขวา
     public float speed = 1f;       // ความเร็วการเคลื่อนที่
     private float t = 0f;
-    public float rayLength = 5f;
+    public float timeDelay = 1f;
+    public bool goingToStart = true;
+    public bool hit = false;
     [System.Obsolete]
     private void Start()
     {
@@ -23,14 +25,13 @@ public class Cube : MonoBehaviour
     }
     void Update()
     {
+        
         if (gamePlay.isMoving)
         {
-            transform.position -= new Vector3(0, Time.deltaTime * speedDown, 0);
+            //transform.position -= new Vector3(0, Time.deltaTime * speedDown, 0);
         }
-        else
+        else if(!hit)
         {
-            Debug.DrawRay(transform.position, Vector3.down * rayLength, Color.blue);
-            // เพิ่มค่าเวลา (0 → 1)
             t += Time.deltaTime * speed;
 
             // ใช้ quadratic Bezier curve: B(t) = (1 - t)^2 * start + 2(1 - t)t * mid + t^2 * end
@@ -48,23 +49,34 @@ public class Cube : MonoBehaviour
                 (startPoint, endPoint) = (endPoint, startPoint);
                 t = 0f;
             }
-        } 
-    }
-
-    
-        
-        
-    private void OnCollisionEnter(Collision collision)
-    {
-        // ถ้า tag ของวัตถุที่ชนคือ "Cube"
-        if (collision.gameObject.CompareTag("Cube"))
+        }
+        if (hit)
         {
             if (gamePlay != null)
             {
                 gamePlay.isMoving = false;
             }
-            Destroy(rb);
-            Destroy(this);
+            timeDelay += Time.deltaTime;
+            if (timeDelay >= 3)
+            {
+                gamePlay.hascube = false;
+                gamePlay.Cam.transform.position += new Vector3(0, gamePlay.cubeHeight, 0);
+                Destroy(rb);
+                Destroy(this);
+                hit = false;
+            }
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        // ถ้า tag ของวัตถุที่ชนคือ "Cube"
+        if (collision.gameObject.CompareTag("Cube"))
+        {
+            hit = true;
+            if (collision.transform.position.x == this.transform.position.x)
+            {
+                Debug.Log("Perfect");
+            }
         }
         // ถ้า tag ของวัตถุที่ชนคือ "Lose"
         else if (collision.gameObject.CompareTag("Lose"))
@@ -73,7 +85,10 @@ public class Cube : MonoBehaviour
             {
                 gamePlay.isMoving = false;
             }
-            Destroy(this);
+            Destroy(this.gameObject);
+            gamePlay.life -= 1;
+            Debug.Log(gamePlay.life);
+            gamePlay.hascube = false;
         }
     }
 }
