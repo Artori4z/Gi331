@@ -57,7 +57,7 @@ public class Cube : MonoBehaviour
                 gamePlay.isMoving = false;
             }
             timeDelay += Time.deltaTime;
-            if (timeDelay >= 3)
+            if (timeDelay >= 2 && (this.transform.rotation.z >= -1 && this.transform.rotation.z <= 1))
             {
                 gamePlay.hascube = false;
                 gamePlay.Cam.transform.position += new Vector3(0, gamePlay.cubeHeight, 0);
