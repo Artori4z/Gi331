@@ -6,7 +6,7 @@ public class GamePlayPao : MonoBehaviour
     [SerializeField] private GameObject[] Cube;
     [SerializeField] private GameObject SpawnPoint;
     [SerializeField] public GameObject Cam;
-    int cubecount = 0;
+    public int cubecount = 0;
     public float cubeHeight;
     public bool isMoving = false;
     public bool hascube = false;
@@ -38,7 +38,6 @@ public class GamePlayPao : MonoBehaviour
         if ((Input.GetMouseButtonDown(0) && hascube) || (Input.touchCount > 0 && hascube))
         {
             isMoving = true;
-            cubecount ++;
         }
 
         if(cubecount >= 10)

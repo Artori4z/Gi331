@@ -3,15 +3,15 @@
 public class Cube : MonoBehaviour
 {
 
-    public float speedDown = 1f;
-    GamePlayPao gamePlay;
+    public float speedDown = Physics.gravity.y;
+    public GamePlayPao gamePlay;
     Rigidbody rb;
     public Transform startPoint;   // จุดเริ่มทางซ้าย
     public Transform midPoint;     // จุดต่ำสุด (กลาง)
     public Transform endPoint;     // จุดทางขวา
     public float speed = 1f;       // ความเร็วการเคลื่อนที่
     private float t = 0f;
-    public float timeDelay = 1f;
+    public float timeDelay = 0f;
     public bool goingToStart = true;
     public bool hit = false;
     [System.Obsolete]
@@ -25,16 +25,16 @@ public class Cube : MonoBehaviour
     }
     void Update()
     {
-        
-        if (gamePlay.isMoving)
+
+        if (gamePlay.isMoving == true)
         {
-            //transform.position -= new Vector3(0, Time.deltaTime * speedDown, 0);
+            rb.useGravity = true;
+            rb.AddForce(Physics.gravity * 0.5f, ForceMode.Acceleration);
         }
-        else if(!hit)
+        if (!hit && gamePlay.isMoving == false)
         {
             t += Time.deltaTime * speed;
-
-            // ใช้ quadratic Bezier curve: B(t) = (1 - t)^2 * start + 2(1 - t)t * mid + t^2 * end
+            rb.useGravity = false;
             Vector3 position =
                 Mathf.Pow(1 - t, 2) * startPoint.position +
                 2 * (1 - t) * t * midPoint.position +
@@ -42,10 +42,8 @@ public class Cube : MonoBehaviour
 
             transform.position = position;
 
-            // เมื่อถึงจุดสิ้นสุดให้วนกลับ
             if (t > 1f)
             {
-                // กลับทิศ (ไปกลับ)
                 (startPoint, endPoint) = (endPoint, startPoint);
                 t = 0f;
             }
@@ -56,14 +54,28 @@ public class Cube : MonoBehaviour
             {
                 gamePlay.isMoving = false;
             }
-            timeDelay += Time.deltaTime;
-            if (timeDelay >= 2 && (this.transform.rotation.z >= -1 && this.transform.rotation.z <= 1))
+
+            float zRot = transform.eulerAngles.z;
+            // แปลงให้ช่วงอยู่ระหว่าง -180 ถึง 180 (จะได้ไม่ต้องกังวลค่า 359)
+            if (zRot > 180f) zRot -= 360f;
+
+            if (Mathf.Abs(zRot) <= 1f)
             {
-                gamePlay.hascube = false;
-                gamePlay.Cam.transform.position += new Vector3(0, gamePlay.cubeHeight, 0);
-                Destroy(rb);
-                Destroy(this);
-                hit = false;
+                timeDelay += Time.deltaTime;
+
+                if (timeDelay >= 2f)
+                {
+                    gamePlay.hascube = false;
+                    gamePlay.Cam.transform.position += new Vector3(0, gamePlay.cubeHeight, 0);
+                    Destroy(rb);
+                    Destroy(this);
+                    hit = false;
+                    gamePlay.cubecount++;
+                }
+            }
+            else
+            {
+                timeDelay = 0f;
             }
         }
     }

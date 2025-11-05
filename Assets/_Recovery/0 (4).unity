@@ -441,7 +441,6 @@ MonoBehaviour:
   - {fileID: 5430059610988074418, guid: 5ba55ca8de6610b4d98da7f9a9a114d1, type: 3}
   SpawnPoint: {fileID: 564483579}
   Cam: {fileID: 2049861570}
-  cubecount: 0
   cubeHeight: 0
   isMoving: 1
   hascube: 0
@@ -575,12 +574,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1002541211}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.79, z: -0}
+  m_LocalRotation: {x: -0.10452846, y: -0, z: -0, w: 0.9945219}
+  m_LocalPosition: {x: 0, y: -6.6523294, z: 9.153114}
   m_LocalScale: {x: 11, y: 1, z: 11}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2049861573}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1002541213
 MonoBehaviour:
@@ -676,12 +675,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1082616814}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.10452846, y: -0, z: -0, w: 0.9945219}
+  m_LocalPosition: {x: 0, y: -2.9451504, z: 8.365129}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2049861573}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1082616816
 BoxCollider:
@@ -1310,9 +1309,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1082616815}
   - {fileID: 564483580}
   - {fileID: 1435046710}
   - {fileID: 493515186}
+  - {fileID: 1002541212}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 12, y: 0, z: 0}
 --- !u!114 &2049861574
@@ -1369,6 +1370,4 @@ SceneRoots:
   - {fileID: 1095918442}
   - {fileID: 878087963}
   - {fileID: 1290075851}
-  - {fileID: 1002541212}
-  - {fileID: 1082616815}
   - {fileID: 907046544}
