@@ -1,9 +1,12 @@
+
 ﻿using System.Net;
 using UnityEngine;
+
 using UnityEngine.InputSystem;
 
 public class GamePlayPao : MonoBehaviour
-{
+{   
+    //stuctor
     [SerializeField] private GameObject[] Cube;
     [SerializeField] private GameObject[] SpawnPoint;
     [SerializeField] public GameObject Cam;
@@ -15,6 +18,7 @@ public class GamePlayPao : MonoBehaviour
     public float canSpawm = 5;
     int random;
     public int life;
+
     public int randomSpawn = 0;
     public int Lv = 3;
     public int perfectCount = 0;
@@ -33,16 +37,19 @@ public class GamePlayPao : MonoBehaviour
         hascube = true;
         isMoving = false;
         life = 3;
+
         boots = false;
         fixedZ = SpawnPoint[1].transform.localPosition.z;
         RenderSettings.skybox = Sky[0];
         DynamicGI.UpdateEnvironment();
     }
+
     void Update()
     {
         if (perfectCount == 10)
         {
             boots = true;
+
         }
         if (bootsTimer >= 5)
         {
