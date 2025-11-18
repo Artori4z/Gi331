@@ -226,10 +226,6 @@ public class building : MonoBehaviour
                             }
                         }
                     }
-                    else
-                    {
-                        timeDelay = 0f;
-                    }
                 }
             }
             //ของตอนมีBoots

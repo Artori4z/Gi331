@@ -97,10 +97,10 @@ public class GamePlay : MonoBehaviour
             case 10:
                 Lv = 2;
                 break;
-            case 15:
+            case 20:
                 Lv = 3;
                 break;
-            case 20:
+            case 30:
                 Lv = 4;
                 break;
         }
