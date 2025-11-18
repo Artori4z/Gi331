@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -32,5 +33,15 @@ public class UIManager : MonoBehaviour
     public void SetOnTimeScale()
     {
         Time.timeScale = 1f;
+    }
+
+    public void setOffTimeScale()
+    {
+        Time.timeScale = 0f;
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }
