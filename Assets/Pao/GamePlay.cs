@@ -11,6 +11,8 @@ public class GamePlay : MonoBehaviour
     [SerializeField] GameObject[] SpawnPoint;
     [SerializeField] public GameObject Cam;
     [SerializeField] GameObject[] LvTwo;
+    public UIManager manager;
+    public GameObject YouLose;
     //เกี่ยวกับกล้อง
     public float BuildingHeight;
     int random;
@@ -18,7 +20,7 @@ public class GamePlay : MonoBehaviour
     public int BuildingCount = 0;
     public bool IsMoving = false;
     public bool HasBuilding = false;
-    float canSpawm = 5;
+    public bool JustReset;
     public int RandomSpawn = 0;
     //Hp กับ Boots
     public int Life;
@@ -37,10 +39,6 @@ public class GamePlay : MonoBehaviour
     int currentSkyLv = 1;
     private void Start()
     {
-        Instantiate(Cube[0], SpawnPoint[RandomSpawn].transform.position, Quaternion.identity);
-        BuildingHeight = Cube[0].transform.localScale.y;
-        HasBuilding = true;
-        IsMoving = false;
         Life = 3;
         boots = false;
         fixedZ = SpawnPoint[1].transform.localPosition.z;
@@ -62,7 +60,7 @@ public class GamePlay : MonoBehaviour
             bootsTimer = 0;
         }
         //สร้างตึกตอนBoots
-        if (boots)
+        if (!JustReset && boots && !manager.Reset)
         {
             bootsTimer += Time.deltaTime;
             if (!HasBuilding)
@@ -74,7 +72,7 @@ public class GamePlay : MonoBehaviour
             }
         }
         //สร้างตึกปกติ
-        else
+        else if (!JustReset && !boots && !manager.Reset)
         {
             if (!HasBuilding)
             {
@@ -84,6 +82,19 @@ public class GamePlay : MonoBehaviour
                 Instantiate(Cube[random], SpawnPoint[RandomSpawn].transform.position, Quaternion.identity);
                 HasBuilding = true;
                 IsMoving = false;
+            }
+        }
+        else if (JustReset && !manager.Reset)
+        {
+            bootsTimer += Time.deltaTime;
+            if (!HasBuilding)
+            {
+                Instantiate(Cube[0], SpawnPoint[0].transform.position, Quaternion.identity);
+                BuildingHeight = Cube[random].transform.localScale.y;
+                HasBuilding = true;
+                IsMoving = false;
+                JustReset = false;
+                RandomSpawn = 0;
             }
         }
         //กดจอวางตึก
@@ -105,7 +116,19 @@ public class GamePlay : MonoBehaviour
                 break;
         }
         //เปลี่ยนBg
-        if (Lv == 2 && currentSkyLv != 2)
+        if (Lv == 1 && currentSkyLv != 1)
+        {
+            if(currentSkyLv == 2)
+            {
+                currentSkyLv = 1;
+                StartCoroutine(FadeSkybox(Sky[1], Sky[0], 2f));
+            }else if (currentSkyLv >= 3)
+            {
+                currentSkyLv = 1;
+                StartCoroutine(FadeSkybox(Sky[2], Sky[0], 2f));
+            }          
+        }
+        else if (Lv == 2 && currentSkyLv != 2)
         {
             currentSkyLv = 2;
             StartCoroutine(FadeSkybox(Sky[0], Sky[1], 2f));
@@ -139,8 +162,10 @@ public class GamePlay : MonoBehaviour
         }
         if (Life <= 0)
         {
+            YouLose.SetActive(true);
             Time.timeScale = 0f;
         }
+        
     }
     //วิธีขยับของLv3 & Endless
     private void MoveSpawnPointUpDown(GameObject spawn, ref bool moveUp, float fixedLocalZ, GameObject minPoint, GameObject maxPoint)
@@ -182,5 +207,11 @@ public class GamePlay : MonoBehaviour
         }
         RenderSettings.skybox = toSky;
         DynamicGI.UpdateEnvironment();
+    }
+    public void Reset()
+    {
+        Lv = 1;
+        Life = 3;
+        BuildingCount = 0;
     }
 }

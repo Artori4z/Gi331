@@ -1001,7 +1001,6 @@ GameObject:
   m_Component:
   - component: {fileID: 878087963}
   - component: {fileID: 878087964}
-  - component: {fileID: 878087962}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1009,50 +1008,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &878087962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878087961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1a3998ba784f3f4586cfdc1d2ddb014, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GamePlayPao
-  Cube:
-  - {fileID: 2292340547150752122, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
-  - {fileID: 5637379924134616350, guid: 3b04941109977d643817f214d56a92bd, type: 3}
-  - {fileID: 5430059610988074418, guid: 5ba55ca8de6610b4d98da7f9a9a114d1, type: 3}
-  SpawnPoint:
-  - {fileID: 564483579}
-  - {fileID: 493515185}
-  - {fileID: 1435046709}
-  Cam: {fileID: 2049861570}
-  LvTwo:
-  - {fileID: 1211315341}
-  - {fileID: 723437562}
-  - {fileID: 1804432224}
-  - {fileID: 232065899}
-  - {fileID: 1767074307}
-  cubecount: 0
-  cubeHeight: 0
-  isMoving: 1
-  hascube: 0
-  canSpawm: 1
-  life: 0
-  randomSpawn: 0
-  Lv: 1
-  perfectCount: 8
-  EndlessSpeed: 2
-  Lv2Swap: 0
-  bootsTimer: 0
-  boots: 0
-  Sky:
-  - {fileID: 2100000, guid: d91aac2ab6cacf042bdd81a4b63cc09a, type: 2}
-  - {fileID: 2100000, guid: 40616ebcfc649c74d89141de9e3c3814, type: 2}
-  - {fileID: 2100000, guid: 805095dec49e0b34cb91600677c99426, type: 2}
 --- !u!4 &878087963
 Transform:
   m_ObjectHideFlags: 0
@@ -1082,7 +1037,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   mainMenu: {fileID: 1849267446}
   levelSelect: {fileID: 631171494}
-  gameplay: {fileID: 878087962}
+  gameplay: {fileID: 0}
 --- !u!1001 &898139362
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3215,7 +3170,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 878087962}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GamePlayPao, Assembly-CSharp
         m_MethodName: set_enabled
         m_Mode: 6
@@ -3828,7 +3783,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 878087962}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GamePlayPao, Assembly-CSharp
         m_MethodName: set_enabled
         m_Mode: 6
@@ -4854,7 +4809,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 878087962}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GamePlayPao, Assembly-CSharp
         m_MethodName: set_enabled
         m_Mode: 6
