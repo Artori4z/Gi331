@@ -14,7 +14,7 @@ public class Combo : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             combo += 1;
-            comboText.text = combo.ToString();
+            comboText.text = "X"+combo+"!!";
         }
     }
 }
