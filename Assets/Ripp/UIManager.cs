@@ -5,7 +5,7 @@ public class UIManager : MonoBehaviour
     public GameObject mainMenu;
     public GameObject levelSelect;
 
-    public GamePlayPao gameplay;
+    public GamePlay gameplay;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     

@@ -1,33 +1,37 @@
 ﻿using UnityEngine;
 
-public class Cube : MonoBehaviour
+public class building : MonoBehaviour
 {
-    public GamePlayPao gamePlay;
+    //GamePlay & Transform
+    public GamePlay gamePlay;
     Rigidbody rb;
     public Transform startPoint;
     public Transform midPoint;
     public Transform endPoint;
+    //ขยับซ้าย ขวา 
     private float t = 0f;
-    public float timeDelay = 0f;
-    public bool goingToStart = true;
-    public bool hit = false;
-    private bool initialized = false;
     public float speed = 2;
+    public bool goingToStart = true;
+    private bool initialized = false;
     private enum StartType { Start, Mid, End }
     private StartType startType;
     private int phase = 0;
     Vector3 position;
+    //ดูตอนตึกโดนตึก
+    public float timeDelay = 0f;
+    public bool hit = false;
     [System.Obsolete]
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        gamePlay = FindObjectOfType<GamePlayPao>();
+        gamePlay = FindObjectOfType<GamePlay>();
         startPoint = GameObject.Find("Start").transform;
         midPoint = GameObject.Find("SpawnPoint").transform;
         endPoint = GameObject.Find("End").transform;
     }
     void Update()
     {
+        //ปรับความเร็วตามLv
         switch (gamePlay.Lv)
         {
             case 1:
@@ -40,29 +44,36 @@ public class Cube : MonoBehaviour
                 speed = 2f;
                 break;
         }
-        if (gamePlay.isMoving)
+        //กดจอแล้วตึกตก
+        if (gamePlay.IsMoving)
         {
+            //ของตอนมีBoots
             if (gamePlay.boots)
             {
                 rb.useGravity = true;
                 rb.AddForce(Physics.gravity * 100, ForceMode.Acceleration);
             }
+            //ของตอนปกติ
             rb.useGravity = true;
             rb.AddForce(Physics.gravity * 10, ForceMode.Acceleration);
         }
-        if (!gamePlay.isMoving)
+        else
         {
+            //ตอนยังไม่กด
             rb.useGravity = false;
         }
-        if (!hit && !gamePlay.isMoving && !gamePlay.boots)
+        //ขยับตอนยังไม่ได้กด
+        if (!hit && !gamePlay.IsMoving && !gamePlay.boots)
         {
+            //ดูว่าสร้างตึกที่Pointไหน
             if (!initialized)
             {
+                //เข้าEndless
                 if (gamePlay.Lv > 3)
                 {
                     speed = gamePlay.EndlessSpeed;
                 }
-                int randomStart = gamePlay.randomSpawn;
+                int randomStart = gamePlay.RandomSpawn;
                 switch (randomStart)
                 {
                     case 1:
@@ -83,26 +94,27 @@ public class Cube : MonoBehaviour
                 }
                 initialized = true;
             }
+            //ขยับซ้ายขวา
             switch (startType)
             {
                 case StartType.Start:
                     t += Time.deltaTime * speed;
-                    rb.useGravity = false; 
-                    position = Mathf.Pow(1 - t, 2) 
-                        * startPoint.position + 2 * (1 - t) * t 
-                        * midPoint.position + Mathf.Pow(t, 2) 
+                    rb.useGravity = false;
+                    position = Mathf.Pow(1 - t, 2)
+                        * startPoint.position + 2 * (1 - t) * t
+                        * midPoint.position + Mathf.Pow(t, 2)
                         * endPoint.position;
-                    transform.position = position; 
+                    transform.position = position;
                     if (t > 1f)
                     {
                         (startPoint, endPoint) = (endPoint, startPoint);
-                        t = 0f; 
+                        t = 0f;
                     }
                     break;
                 case StartType.Mid:
                     if (phase == 0)
                     {
-                        t += Time.deltaTime * (speed*2);
+                        t += Time.deltaTime * (speed * 2);
                         Vector3 position =
                             Mathf.Pow(1 - t, 2) * midPoint.position +
                             2 * (1 - t) * t * ((midPoint.position + endPoint.position) / 2) +
@@ -142,15 +154,17 @@ public class Cube : MonoBehaviour
                     break;
             }
         }
+        //ตึกโดนตึกก่อนหน้า
         if (hit)
         {
             if (gamePlay != null)
             {
-                gamePlay.isMoving = false;
+                gamePlay.IsMoving = false;
             }
             if (!gamePlay.boots)
             {
-                if (gamePlay.perfectCount == 9)
+                //ทำให้ตึกก่อนเข้าbootsมาอยุ่ตรงกลาง
+                if (gamePlay.PerfectCount == 9)
                 {
                     timeDelay += Time.deltaTime;
                     if (timeDelay >= 1f)
@@ -159,36 +173,53 @@ public class Cube : MonoBehaviour
                         this.transform.position = new Vector3(0, this.transform.position.y, this.transform.position.z);
                         if (this.transform.position == new Vector3(0, this.transform.position.y, this.transform.position.z))
                         {
-                            gamePlay.hascube = false;
-                            gamePlay.Cam.transform.position += new Vector3(0, gamePlay.cubeHeight, 0);
+                            gamePlay.HasBuilding = false;
+                            gamePlay.Cam.transform.position += new Vector3(0, gamePlay.BuildingHeight, 0);
                             Destroy(rb);
                             Destroy(this);
                             hit = false;
-                            gamePlay.cubecount++;
-                            gamePlay.perfectCount++;
-                            if (gamePlay.Lv > 3)
-                            {
-                                gamePlay.EndlessSpeed += 0.1f;
-                            }
+                            gamePlay.BuildingCount++;
+                            gamePlay.PerfectCount++;
                         }
                     }
                 }
                 else
                 {
-                    float zRot = transform.eulerAngles.z;
-                    if (zRot > 180f) zRot -= 360f;
+                    //วัดความเอียงของตึก
+                    float zRotation = transform.eulerAngles.z;
+                    if (zRotation > 180f) zRotation -= 360f;
                     timeDelay += Time.deltaTime;
-                    if (Mathf.Abs(zRot) <= 10f)
+                    //กันไม่ให้ตึกเอียงไปมานานเกิน
+                    if (timeDelay >= 5f)
                     {
+                        //ทำให้ตึกอยุ่กับที่
+                        gamePlay.HasBuilding = false;
+                        gamePlay.Cam.transform.position += new Vector3(0, gamePlay.BuildingHeight, 0);
+                        Destroy(rb);
+                        Destroy(this);
+                        hit = false;
+                        gamePlay.BuildingCount++;
+                        gamePlay.PerfectCount++;
+                        //+ความเร็วถ้าเข้าEndless
+                        if (gamePlay.Lv > 3)
+                        {
+                            gamePlay.EndlessSpeed += 0.1f;
+                        }
+                    }
+                    if (Mathf.Abs(zRotation) <= 5f)
+                    {
+                        
                         if (timeDelay >= 1f)
                         {
-                            gamePlay.hascube = false;
-                            gamePlay.Cam.transform.position += new Vector3(0, gamePlay.cubeHeight, 0);
+                            //ทำให้ตึกอยุ่กับที่
+                            gamePlay.HasBuilding = false;
+                            gamePlay.Cam.transform.position += new Vector3(0, gamePlay.BuildingHeight, 0);
                             Destroy(rb);
                             Destroy(this);
                             hit = false;
-                            gamePlay.cubecount++;
-                            gamePlay.perfectCount++;
+                            gamePlay.BuildingCount++;
+                            gamePlay.PerfectCount++;
+                            //+ความเร็วถ้าเข้าEndless
                             if (gamePlay.Lv > 3)
                             {
                                 gamePlay.EndlessSpeed += 0.1f;
@@ -197,51 +228,56 @@ public class Cube : MonoBehaviour
                     }
                 }
             }
+            //ของตอนมีBoots
             else if (gamePlay.boots)
             {
-                gamePlay.hascube = false;
-                gamePlay.Cam.transform.position += new Vector3(0, gamePlay.cubeHeight, 0);
+                gamePlay.HasBuilding = false;
+                gamePlay.Cam.transform.position += new Vector3(0, gamePlay.BuildingHeight, 0);
                 Destroy(rb);
                 Destroy(this);
                 hit = false;
-                gamePlay.cubecount++;
+                gamePlay.BuildingCount++;
                 rb.useGravity = false;
             }
         }
     }
     private void OnCollisionEnter(Collision collision)
     {
+        //โดนตึกก่อนหน้า
         if (collision.gameObject.CompareTag("Cube"))
         {
             if (gamePlay.Lv2Swap)
             {
                 Debug.Log("true");
                 gamePlay.Lv2Swap = false;
-            }else
+            }
+            else
             {
                 Debug.Log("false");
                 gamePlay.Lv2Swap = true;
             }
             hit = true;
         }
+        //โดนอันที่ตั้งไว้ว่าแพ้
         else if (collision.gameObject.CompareTag("Lose"))
         {
             if (gamePlay != null)
             {
-                gamePlay.isMoving = false;
+                gamePlay.IsMoving = false;
             }
             Destroy(this.gameObject);
-            gamePlay.life -= 1;
-            gamePlay.hascube = false;
-            gamePlay.perfectCount = 0;
+            gamePlay.Life -= 1;
+            gamePlay.HasBuilding = false;
+            gamePlay.PerfectCount = 0;
         }
     }
+    //ดูว่าตึกยังโดนอีกตึกอยุ่มั้ย
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Cube"))
         {
             hit = false;
-            gamePlay.isMoving = true;
+            gamePlay.IsMoving = true;
             timeDelay = 0;
         }
     }
