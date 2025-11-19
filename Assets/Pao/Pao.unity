@@ -6166,7 +6166,7 @@ MonoBehaviour:
   levelUpClip: {fileID: 8300000, guid: 96f00b2470a62d343986584fea9a9bd3, type: 3}
   envTransitionClip: {fileID: 8300000, guid: 83cbd5fc07874b14a991972f958c34f2, type: 3}
   bgmLv1Clip: {fileID: 8300000, guid: 48eeaa6d62ead7549af521c18e5a18a0, type: 3}
-  bgmLv2Clip: {fileID: 0}
+  bgmLv2Clip: {fileID: 8300000, guid: c3b0995c6a6c20143b16897dbf67f345, type: 3}
   bgmLv3Clip: {fileID: 0}
 --- !u!114 &878087965
 MonoBehaviour:
