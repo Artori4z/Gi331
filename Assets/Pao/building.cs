@@ -8,6 +8,21 @@ public class building : MonoBehaviour
     public Transform startPoint;
     public Transform midPoint;
     public Transform endPoint;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioClip blockDropClip;
+    [SerializeField] private AudioClip landNormalClip;
+    [SerializeField] private AudioClip landPerfectClip;
+    [SerializeField] private AudioClip comboUpClip;
+    [SerializeField] private AudioClip blockFallClip;
+    [SerializeField] private AudioClip loseLifeClip;
+    [SerializeField] private AudioClip endlessSpeedUpClip;
+    [SerializeField] private AudioClip pathSwitchClip;
+    [SerializeField] private AudioClip cameraMoveClip;
+
+    private bool hasPlayedDropSfx = false;
+
     //ขยับซ้าย ขวา 
     private float t = 0f;
     public float speed = 2;
@@ -17,9 +32,11 @@ public class building : MonoBehaviour
     private StartType startType;
     private int phase = 0;
     Vector3 position;
+
     //ดูตอนตึกโดนตึก
     public float timeDelay = 0f;
     public bool hit = false;
+
     [System.Obsolete]
     private void Start()
     {
@@ -28,10 +45,15 @@ public class building : MonoBehaviour
         startPoint = GameObject.Find("Start").transform;
         midPoint = GameObject.Find("SpawnPoint").transform;
         endPoint = GameObject.Find("End").transform;
+        sfxSource = GetComponent<AudioSource>();
+        if (sfxSource == null)
+            sfxSource = gameObject.AddComponent<AudioSource>();
+
     }
+
     void Update()
     {
-        //ปรับความเร็วตามLv
+        //ปรับความเร็วตาม Lv
         switch (gamePlay.Lv)
         {
             case 1:
@@ -44,10 +66,17 @@ public class building : MonoBehaviour
                 speed = 2f;
                 break;
         }
+
         //กดจอแล้วตึกตก
         if (gamePlay.IsMoving)
         {
-            //ของตอนมีBoots
+            if (!hasPlayedDropSfx)
+            {
+                PlaySFX(blockDropClip);
+                hasPlayedDropSfx = true;
+            }
+
+            //ของตอนมี Boots
             if (gamePlay.boots)
             {
                 rb.useGravity = true;
@@ -62,13 +91,14 @@ public class building : MonoBehaviour
             //ตอนยังไม่กด
             rb.useGravity = false;
         }
+
         //ขยับตอนยังไม่ได้กด
         if (!hit && !gamePlay.IsMoving && !gamePlay.boots)
         {
-            //ดูว่าสร้างตึกที่Pointไหน
+            //ดูว่าสร้างตึกที่ Point ไหน
             if (!initialized)
             {
-                //เข้าEndless
+                //เข้า Endless
                 if (gamePlay.Lv > 3)
                 {
                     speed = gamePlay.EndlessSpeed;
@@ -94,6 +124,7 @@ public class building : MonoBehaviour
                 }
                 initialized = true;
             }
+
             //ขยับซ้ายขวา
             switch (startType)
             {
@@ -154,6 +185,7 @@ public class building : MonoBehaviour
                     break;
             }
         }
+
         //ตึกโดนตึกก่อนหน้า
         if (hit)
         {
@@ -161,9 +193,10 @@ public class building : MonoBehaviour
             {
                 gamePlay.IsMoving = false;
             }
+
             if (!gamePlay.boots)
             {
-                //ทำให้ตึกก่อนเข้าbootsมาอยุ่ตรงกลาง
+                //ทำให้ตึกก่อนเข้า Boots มาอยู่ตรงกลาง (PerfectCount == 9)
                 if (gamePlay.PerfectCount == 9)
                 {
                     timeDelay += Time.deltaTime;
@@ -173,6 +206,16 @@ public class building : MonoBehaviour
                         this.transform.position = new Vector3(0, this.transform.position.y, this.transform.position.z);
                         if (this.transform.position == new Vector3(0, this.transform.position.y, this.transform.position.z))
                         {
+                            PlaySFX(landPerfectClip);
+                            if (comboUpClip != null)
+                            {
+                                PlaySFX(comboUpClip);
+                            }
+                            if (cameraMoveClip != null)
+                            {
+                                PlaySFX(cameraMoveClip);
+                            }
+
                             gamePlay.HasBuilding = false;
                             gamePlay.Cam.transform.position += new Vector3(0, gamePlay.BuildingHeight, 0);
                             Destroy(rb);
@@ -189,10 +232,19 @@ public class building : MonoBehaviour
                     float zRotation = transform.eulerAngles.z;
                     if (zRotation > 180f) zRotation -= 360f;
                     timeDelay += Time.deltaTime;
+
                     //กันไม่ให้ตึกเอียงไปมานานเกิน
                     if (timeDelay >= 5f)
                     {
-                        //ทำให้ตึกอยุ่กับที่
+                        bool isEndless = gamePlay.Lv > 3;
+
+                        PlaySFX(landNormalClip);
+                        if (cameraMoveClip != null)
+                        {
+                            PlaySFX(cameraMoveClip);
+                        }
+
+                        //ทำให้ตึกอยู่กับที่
                         gamePlay.HasBuilding = false;
                         gamePlay.Cam.transform.position += new Vector3(0, gamePlay.BuildingHeight, 0);
                         Destroy(rb);
@@ -200,17 +252,31 @@ public class building : MonoBehaviour
                         hit = false;
                         gamePlay.BuildingCount++;
                         gamePlay.PerfectCount++;
-                        //+ความเร็วถ้าเข้าEndless
-                        if (gamePlay.Lv > 3)
+
+                        //+ความเร็วถ้าเข้า Endless
+                        if (isEndless)
                         {
                             gamePlay.EndlessSpeed += 0.1f;
+                            PlaySFX(endlessSpeedUpClip);
                         }
                     }
+
                     if (Mathf.Abs(zRotation) <= 5f)
                     {
-                        
                         if (timeDelay >= 1f)
                         {
+                            bool isEndless = gamePlay.Lv > 3;
+
+                            PlaySFX(landPerfectClip);
+                            if (comboUpClip != null)
+                            {
+                                PlaySFX(comboUpClip);
+                            }
+                            if (cameraMoveClip != null)
+                            {
+                                PlaySFX(cameraMoveClip);
+                            }
+
                             //ทำให้ตึกอยุ่กับที่
                             gamePlay.HasBuilding = false;
                             gamePlay.Cam.transform.position += new Vector3(0, gamePlay.BuildingHeight, 0);
@@ -219,18 +285,26 @@ public class building : MonoBehaviour
                             hit = false;
                             gamePlay.BuildingCount++;
                             gamePlay.PerfectCount++;
-                            //+ความเร็วถ้าเข้าEndless
-                            if (gamePlay.Lv > 3)
+
+                            //+ความเร็วถ้าเข้า Endless
+                            if (isEndless)
                             {
                                 gamePlay.EndlessSpeed += 0.1f;
+                                PlaySFX(endlessSpeedUpClip);
                             }
                         }
                     }
                 }
             }
-            //ของตอนมีBoots
+            //ของตอนมี Boots
             else if (gamePlay.boots)
             {
+                PlaySFX(landNormalClip);
+                if (cameraMoveClip != null)
+                {
+                    PlaySFX(cameraMoveClip);
+                }
+
                 gamePlay.HasBuilding = false;
                 gamePlay.Cam.transform.position += new Vector3(0, gamePlay.BuildingHeight, 0);
                 Destroy(rb);
@@ -241,11 +315,17 @@ public class building : MonoBehaviour
             }
         }
     }
+
     private void OnCollisionEnter(Collision collision)
     {
         //โดนตึกก่อนหน้า
         if (collision.gameObject.CompareTag("Cube"))
         {
+            if (gamePlay != null && gamePlay.Lv == 2)
+            {
+                PlaySFX(pathSwitchClip);
+            }
+
             if (gamePlay.Lv2Swap)
             {
                 Debug.Log("true");
@@ -261,6 +341,9 @@ public class building : MonoBehaviour
         //โดนอันที่ตั้งไว้ว่าแพ้
         else if (collision.gameObject.CompareTag("Lose"))
         {
+            PlaySFX(blockFallClip);
+            PlaySFX(loseLifeClip);
+
             if (gamePlay != null)
             {
                 gamePlay.IsMoving = false;
@@ -271,7 +354,8 @@ public class building : MonoBehaviour
             gamePlay.PerfectCount = 0;
         }
     }
-    //ดูว่าตึกยังโดนอีกตึกอยุ่มั้ย
+
+    //ดูว่าตึกยังโดนอีกตึกอยู่มั้ย
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Cube"))
@@ -279,6 +363,14 @@ public class building : MonoBehaviour
             hit = false;
             gamePlay.IsMoving = true;
             timeDelay = 0;
+        }
+    }
+
+    private void PlaySFX(AudioClip clip)
+    {
+        if (clip != null && sfxSource != null)
+        {
+            sfxSource.PlayOneShot(clip);
         }
     }
 }

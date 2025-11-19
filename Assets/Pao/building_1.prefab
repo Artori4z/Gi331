@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 4741665018518761530}
   - component: {fileID: 1143462786116602133}
   - component: {fileID: -2549299540920493910}
+  - component: {fileID: 6883287040465956614}
   m_Layer: 0
   m_Name: building_1
   m_TagString: Cube
@@ -205,6 +206,16 @@ MonoBehaviour:
   startPoint: {fileID: 0}
   midPoint: {fileID: 0}
   endPoint: {fileID: 0}
+  sfxSource: {fileID: 0}
+  blockDropClip: {fileID: 8300000, guid: 83cbd5fc07874b14a991972f958c34f2, type: 3}
+  landNormalClip: {fileID: 8300000, guid: 0b5f15b731f5b2f48be4dc56b9675bed, type: 3}
+  landPerfectClip: {fileID: 8300000, guid: ce9d8b4fb761c05409e9373d6dcd67b5, type: 3}
+  comboUpClip: {fileID: 0}
+  blockFallClip: {fileID: 8300000, guid: 5f9683d774c0e0f4cbdf9199190bcebd, type: 3}
+  loseLifeClip: {fileID: 8300000, guid: becca3d8b1829dd448f51f40c4e7624f, type: 3}
+  endlessSpeedUpClip: {fileID: 0}
+  pathSwitchClip: {fileID: 0}
+  cameraMoveClip: {fileID: 0}
   speed: 2
   goingToStart: 1
   timeDelay: 0
@@ -236,6 +247,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 56
   m_CollisionDetection: 0
+--- !u!114 &6883287040465956614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8062925269611018530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec3e4fbaf6cba9e48964bc4732fbb657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Reset
+  manager: {fileID: 0}
+  gamePlay: {fileID: 0}
 --- !u!1001 &1050570413367217309
 PrefabInstance:
   m_ObjectHideFlags: 0
