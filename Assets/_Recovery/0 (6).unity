@@ -592,7 +592,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &115061302
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6257,7 +6257,6 @@ GameObject:
   - component: {fileID: 878087963}
   - component: {fileID: 878087965}
   - component: {fileID: 878087964}
-  - component: {fileID: 878087966}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -6369,20 +6368,6 @@ MonoBehaviour:
   buttonClickClip: {fileID: 8300000, guid: 2784c5f80a8f9ab44b6529f010af6b9f, type: 3}
   pauseClip: {fileID: 8300000, guid: 3b9481c67d9d7654c88ec07e9ebdf960, type: 3}
   resumeClip: {fileID: 8300000, guid: ebd4ea650d34c304f9f27c03b1ed4680, type: 3}
---- !u!114 &878087966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878087961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e15ee812d4cb76e4a979700147158d1e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::fireBaseRankingManager
-  gamePlay: {fileID: 878087964}
-  score: 0
 --- !u!1001 &887401077
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10794,7 +10779,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1442926526
 RectTransform:
   m_ObjectHideFlags: 0

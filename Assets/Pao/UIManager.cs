@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
 {
     public GameObject mainMenu;
     public GameObject levelSelect;
+    public GameObject[] IconMute;
     public GamePlay gameplay;
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI scoreText;
@@ -18,7 +19,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI scoreTextEnd;
     public TextMeshProUGUI scoreTextPause;
     public bool Reset;
-
+    public bool Mute;
     [Header("Audio")]
     [SerializeField] private AudioSource uiAudioSource;
     [SerializeField] private AudioClip uiOpenClip;
@@ -30,14 +31,15 @@ public class UIManager : MonoBehaviour
     {
         MainMenu();
         Reset = false;
+        Mute = false;
     }
 
     void Update()
     {
         scoreText.text = "Score: " + gameplay.BuildingCount;
         lifeText.text = "Life: " + gameplay.Life;
-        scoreTextEnd.text = "Score: " + gameplay.BuildingCount;
         scoreTextPause.text = "Score: " + gameplay.BuildingCount;
+        scoreTextEnd.text = "Your High Score: " + gameplay.highScore + "!!";
 
         if (gameplay.Lv > 3)
         {
@@ -124,6 +126,9 @@ public class UIManager : MonoBehaviour
         gameplay.Lv = 1;
         gameplay.Life = 3;
         gameplay.BuildingCount = 0;
+        gameplay.boots = false;
+        gameplay.PerfectCount = 0;
+        gameplay.bootsTimer = 0;
         gameplay.Cam.transform.position = new Vector3(0, 61, -110);
         gameplay.JustReset = true;
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -134,7 +139,25 @@ public class UIManager : MonoBehaviour
         Reset = false;
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
+    public void Sound()
+    {
+        if (Mute)
+        {
+            AudioListener.volume = 1f;
+            Mute = false;
+            IconMute[0].SetActive(false);
+            IconMute[1].SetActive(false);
+            IconMute[2].SetActive(false);
+        }
+        else
+        {
+            AudioListener.volume = 0f;
+            Mute = true;
+            IconMute[0].SetActive(true);
+            IconMute[1].SetActive(true);
+            IconMute[2].SetActive(true);
+        }
+    }
     private void PlayUI(AudioClip clip)
     {
         if (clip != null && uiAudioSource != null)
