@@ -45,6 +45,10 @@ public class building : MonoBehaviour
         startPoint = GameObject.Find("Start").transform;
         midPoint = GameObject.Find("SpawnPoint").transform;
         endPoint = GameObject.Find("End").transform;
+        sfxSource = GetComponent<AudioSource>();
+        if (sfxSource == null)
+            sfxSource = gameObject.AddComponent<AudioSource>();
+
     }
 
     void Update()
