@@ -1,5 +1,4 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Net;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,20 +12,24 @@ public class GamePlay : MonoBehaviour
     [SerializeField] GameObject[] LvTwo;
     public UIManager manager;
     public GameObject YouLose;
+
     //เกี่ยวกับกล้อง
     public float BuildingHeight;
     int random;
+
     //เกี่ยวกับสร้างตัวตึก
     public int BuildingCount = 0;
     public bool IsMoving = false;
     public bool HasBuilding = false;
     public bool JustReset;
     public int RandomSpawn = 0;
+
     //Hp กับ Boots
     public int Life;
     public int PerfectCount = 0;
     public float bootsTimer = 0f;
     public bool boots;
+
     //Lv กับ Endless
     public int Lv = 1;
     public float EndlessSpeed = 2;
@@ -34,9 +37,29 @@ public class GamePlay : MonoBehaviour
     bool moveUpOne = true;
     bool moveUpTwo = true;
     float fixedZ;
+
     //Bg
     [SerializeField] Material[] Sky;
     int currentSkyLv = 1;
+
+    // ------------------ AUDIO เพิ่มมา ------------------
+    [Header("Audio - SFX")]
+    [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioSource bgmSource;
+    [SerializeField] private AudioClip blockSpawnClip;
+    [SerializeField] private AudioClip bootsStartClip;
+    [SerializeField] private AudioClip bootsEndClip;
+    [SerializeField] private AudioClip levelUpClip;
+    [SerializeField] private AudioClip envTransitionClip;
+
+    [Header("Audio - BGM")]
+    [SerializeField] private AudioClip bgmLv1Clip;
+    [SerializeField] private AudioClip bgmLv2Clip;
+    [SerializeField] private AudioClip bgmLv3Clip;
+
+    int previousLv;
+    // ---------------------------------------------------
+
     private void Start()
     {
         Life = 3;
@@ -44,22 +67,30 @@ public class GamePlay : MonoBehaviour
         fixedZ = SpawnPoint[1].transform.localPosition.z;
         RenderSettings.skybox = Sky[0];
         DynamicGI.UpdateEnvironment();
+
+        previousLv = Lv;
+        PlayBGMForLevel(Lv);   // เล่น BGM ตามเลเวลเริ่มต้น
     }
+
     void Update()
     {
-        //นับว่าวางตึกติดกันโดยที่ไม่ตก
-        if (PerfectCount == 10)
+        //นับว่าวางตึกติดกันโดยที่ไม่ตก → เปิด Boots เมื่อครบ 10
+        if (PerfectCount == 10 && !boots)
         {
             boots = true;
+            PlaySFX(bootsStartClip);
         }
-        //ดูว่าBootsหมดยัง
+
+        //ดูว่า Boots หมดหรือยัง
         if (bootsTimer >= 5)
         {
             boots = false;
             PerfectCount = 0;
             bootsTimer = 0;
+            PlaySFX(bootsEndClip);
         }
-        //สร้างตึกตอนBoots
+
+        //สร้างตึกตอน Boots
         if (!JustReset && boots && !manager.Reset)
         {
             bootsTimer += Time.deltaTime;
@@ -69,6 +100,8 @@ public class GamePlay : MonoBehaviour
                 BuildingHeight = Cube[random].transform.localScale.y;
                 HasBuilding = true;
                 IsMoving = false;
+
+                PlaySFX(blockSpawnClip);
             }
         }
         //สร้างตึกปกติ
@@ -82,8 +115,11 @@ public class GamePlay : MonoBehaviour
                 Instantiate(Cube[random], SpawnPoint[RandomSpawn].transform.position, Quaternion.identity);
                 HasBuilding = true;
                 IsMoving = false;
+
+                PlaySFX(blockSpawnClip);
             }
         }
+        //สร้างตึกหลัง Reset
         else if (JustReset && !manager.Reset)
         {
             bootsTimer += Time.deltaTime;
@@ -95,14 +131,18 @@ public class GamePlay : MonoBehaviour
                 IsMoving = false;
                 JustReset = false;
                 RandomSpawn = 0;
+
+                PlaySFX(blockSpawnClip);
             }
         }
-        //กดจอวางตึก
+
+        //กดจอวางตึก (เรื่องตก/แรง นับใน building.cs แล้ว)
         if (Input.touchCount > 0 && HasBuilding)
         {
             IsMoving = true;
         }
-        //เปลี่ยนLv
+
+        //เปลี่ยน Lv ตามจำนวนตึก
         switch (BuildingCount)
         {
             case 10:
@@ -115,29 +155,44 @@ public class GamePlay : MonoBehaviour
                 Lv = 4;
                 break;
         }
-        //เปลี่ยนBg
+
+        //ถ้าเปลี่ยนเลเวล ให้เล่นเสียง + เปลี่ยนเพลง
+        if (Lv != previousLv)
+        {
+            PlaySFX(levelUpClip);
+            PlayBGMForLevel(Lv);
+            previousLv = Lv;
+        }
+
+        //เปลี่ยน Bg
         if (Lv == 1 && currentSkyLv != 1)
         {
-            if(currentSkyLv == 2)
+            if (currentSkyLv == 2)
             {
                 currentSkyLv = 1;
+                PlaySFX(envTransitionClip);
                 StartCoroutine(FadeSkybox(Sky[1], Sky[0], 2f));
-            }else if (currentSkyLv >= 3)
+            }
+            else if (currentSkyLv >= 3)
             {
                 currentSkyLv = 1;
+                PlaySFX(envTransitionClip);
                 StartCoroutine(FadeSkybox(Sky[2], Sky[0], 2f));
-            }          
+            }
         }
         else if (Lv == 2 && currentSkyLv != 2)
         {
             currentSkyLv = 2;
+            PlaySFX(envTransitionClip);
             StartCoroutine(FadeSkybox(Sky[0], Sky[1], 2f));
         }
         else if (Lv >= 3 && currentSkyLv != 3)
         {
             currentSkyLv = 3;
+            PlaySFX(envTransitionClip);
             StartCoroutine(FadeSkybox(Sky[1], Sky[2], 2f));
         }
+
         //Lv2
         if (Lv == 2)
         {
@@ -160,14 +215,15 @@ public class GamePlay : MonoBehaviour
             MoveSpawnPointUpDown(SpawnPoint[1], ref moveUpOne, fixedZ, LvTwo[1], LvTwo[3]);
             MoveSpawnPointUpDown(SpawnPoint[2], ref moveUpTwo, fixedZ, LvTwo[4], LvTwo[2]);
         }
+
         if (Life <= 0)
         {
             YouLose.SetActive(true);
             Time.timeScale = 0f;
         }
-        
     }
-    //วิธีขยับของLv3 & Endless
+
+    //วิธีขยับของ Lv3 & Endless
     private void MoveSpawnPointUpDown(GameObject spawn, ref bool moveUp, float fixedLocalZ, GameObject minPoint, GameObject maxPoint)
     {
         Transform sp = spawn.transform;
@@ -181,7 +237,8 @@ public class GamePlay : MonoBehaviour
         localPos.z = fixedLocalZ;
         sp.localPosition = localPos;
     }
-    //เปลี่ยนBgแบบFade
+
+    //เปลี่ยน Bg แบบ Fade
     IEnumerator FadeSkybox(Material fromSky, Material toSky, float duration)
     {
         float t = 0f;
@@ -208,6 +265,46 @@ public class GamePlay : MonoBehaviour
         RenderSettings.skybox = toSky;
         DynamicGI.UpdateEnvironment();
     }
+
+    //
+    private void PlaySFX(AudioClip clip)
+    {
+        if (clip != null && sfxSource != null)
+        {
+            sfxSource.PlayOneShot(clip);
+        }
+    }
+
+    private void PlayBGM(AudioClip clip)
+    {
+        if (bgmSource == null || clip == null)
+            return;
+
+        if (bgmSource.clip == clip)
+            return;
+
+        bgmSource.clip = clip;
+        bgmSource.loop = true;
+        bgmSource.Play();
+    }
+
+    private void PlayBGMForLevel(int level)
+    {
+        if (level <= 1)
+        {
+            PlayBGM(bgmLv1Clip);
+        }
+        else if (level == 2)
+        {
+            PlayBGM(bgmLv2Clip);
+        }
+        else
+        {
+            PlayBGM(bgmLv3Clip);
+        }
+    }
+    //
+
     public void Reset()
     {
         Lv = 1;
