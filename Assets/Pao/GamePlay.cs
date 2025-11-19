@@ -18,6 +18,7 @@ public class GamePlay : MonoBehaviour
     int random;
 
     //เกี่ยวกับสร้างตัวตึก
+    public int highScore;
     public int BuildingCount = 0;
     public bool IsMoving = false;
     public bool HasBuilding = false;
@@ -94,7 +95,7 @@ public class GamePlay : MonoBehaviour
         if (!JustReset && boots && !manager.Reset)
         {
             bootsTimer += Time.deltaTime;
-            if (!HasBuilding)
+            if (!HasBuilding) 
             {
                 Instantiate(Cube[0], SpawnPoint[0].transform.position, Quaternion.identity);
                 BuildingHeight = Cube[random].transform.localScale.y;
@@ -219,6 +220,10 @@ public class GamePlay : MonoBehaviour
         if (Life <= 0)
         {
             YouLose.SetActive(true);
+            if(highScore < BuildingCount)
+            {
+                highScore = BuildingCount;
+            }
             Time.timeScale = 0f;
         }
     }

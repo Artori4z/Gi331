@@ -5,10 +5,9 @@ public class Destory : MonoBehaviour
 {
     private void OnCollisionEnter(Collision collision)
     {
-        // ถ้า tag ของวัตถุที่ชนคือ "Cube"
-        if (collision.gameObject.CompareTag("Cube"))
+        if (collision.gameObject.CompareTag("Cube") &&
+            collision.gameObject.name != "base")
         {
-            Debug.Log("hit");
             Destroy(collision.gameObject);
         }
     }

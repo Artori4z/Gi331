@@ -193,7 +193,6 @@ public class building : MonoBehaviour
             {
                 gamePlay.IsMoving = false;
             }
-
             if (!gamePlay.boots)
             {
                 //ทำให้ตึกก่อนเข้า Boots มาอยู่ตรงกลาง (PerfectCount == 9)
@@ -304,14 +303,17 @@ public class building : MonoBehaviour
                 {
                     PlaySFX(cameraMoveClip);
                 }
-
-                gamePlay.HasBuilding = false;
-                gamePlay.Cam.transform.position += new Vector3(0, gamePlay.BuildingHeight, 0);
-                Destroy(rb);
-                Destroy(this);
-                hit = false;
-                gamePlay.BuildingCount++;
-                rb.useGravity = false;
+                timeDelay += Time.deltaTime;
+                if (timeDelay >= 0.5f)
+                {
+                    gamePlay.HasBuilding = false;
+                    gamePlay.Cam.transform.position += new Vector3(0, gamePlay.BuildingHeight, 0);
+                    Destroy(rb);
+                    Destroy(this);
+                    hit = false;
+                    gamePlay.BuildingCount++;
+                    rb.useGravity = false;
+                }
             }
         }
     }
@@ -335,6 +337,14 @@ public class building : MonoBehaviour
             {
                 Debug.Log("false");
                 gamePlay.Lv2Swap = true;
+            }
+            if (gamePlay.boots)
+            {
+                rb.AddForce(Physics.gravity / 100, ForceMode.Acceleration);
+            }
+            else
+            {
+                rb.AddForce(Physics.gravity / 10, ForceMode.Acceleration);
             }
             hit = true;
         }
@@ -362,7 +372,6 @@ public class building : MonoBehaviour
         {
             hit = false;
             gamePlay.IsMoving = true;
-            timeDelay = 0;
         }
     }
 
