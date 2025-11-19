@@ -1109,7 +1109,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quit
+  m_text: Back to Menu
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2f195e5d9920d1b4c94225997283703a, type: 2}
   m_sharedMaterial: {fileID: 5836520931464989804, guid: 2f195e5d9920d1b4c94225997283703a, type: 2}
@@ -4120,7 +4120,7 @@ Transform:
   m_GameObject: {fileID: 585980598}
   serializedVersion: 2
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 3.71, y: 19.53, z: -9.52314}
+  m_LocalPosition: {x: 24.81, y: 19.53, z: -9.52314}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5031,7 +5031,43 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 679021582}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 437622239}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 211007111}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 878087965}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SceneReset
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &679021582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5960,9 +5996,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GamePlay
   Cube:
-  - {fileID: 2292340547150752122, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
-  - {fileID: 5637379924134616350, guid: 3b04941109977d643817f214d56a92bd, type: 3}
-  - {fileID: 5430059610988074418, guid: 5ba55ca8de6610b4d98da7f9a9a114d1, type: 3}
+  - {fileID: 8062925269611018530, guid: 9f1939b69559b9d4b8e98701c80184a7, type: 3}
+  - {fileID: 6260245637482667586, guid: ae114bccfacaa024a9192ad91d3cca58, type: 3}
+  - {fileID: 558610766548764164, guid: a3c6f125570345c4dbbdc6b73e054007, type: 3}
   SpawnPoint:
   - {fileID: 564483579}
   - {fileID: 493515185}
@@ -6097,58 +6133,55 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 21227193}
     m_Modifications:
-    - target: {fileID: 659155045607209352, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+    - target: {fileID: 659155045607209352, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.92957
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 659155045607209352, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+    - target: {fileID: 659155045607209352, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.9791994
+      value: 2.41
       objectReference: {fileID: 0}
-    - target: {fileID: 659155045607209352, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+    - target: {fileID: 659155045607209352, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.3068604
+      value: -1
       objectReference: {fileID: 0}
-    - target: {fileID: 659155045607209352, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+    - target: {fileID: 659155045607209352, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 659155045607209352, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+    - target: {fileID: 659155045607209352, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 659155045607209352, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+    - target: {fileID: 659155045607209352, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 659155045607209352, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+    - target: {fileID: 659155045607209352, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 659155045607209352, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+    - target: {fileID: 659155045607209352, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 659155045607209352, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+    - target: {fileID: 659155045607209352, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 659155045607209352, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+    - target: {fileID: 659155045607209352, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2292340547150752122, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+    - target: {fileID: 2292340547150752122, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
       propertyPath: m_Name
       value: base
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1002167175696085934, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
-    - {fileID: 4863521956615609228, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
-    - {fileID: 4074521973912414492, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
 --- !u!1 &903580773
 GameObject:
   m_ObjectHideFlags: 0
@@ -11735,7 +11768,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1636753278}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 878087965}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: QuitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1636753278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12129,7 +12174,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 167d5455369a56f46a8f4527855d3472, type: 3}
 --- !u!4 &1721666532 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 659155045607209352, guid: 9566d2b7f7e390d478aadf3a5bceb7ea, type: 3}
+  m_CorrespondingSourceObject: {fileID: 659155045607209352, guid: 52c49adaf7be98442afbc2fc04ff9524, type: 3}
   m_PrefabInstance: {fileID: 898139362}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1728242720
@@ -12520,6 +12565,30 @@ MonoBehaviour:
       - m_Target: {fileID: 878087964}
         m_TargetAssemblyTypeName: GamePlay, Assembly-CSharp
         m_MethodName: Reset
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 878087965}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SceneReset
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 878087965}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: setOffTimeScale
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
