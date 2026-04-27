@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Services.Analytics;
+using UnityEngine;
 
 public class building : MonoBehaviour
 {
@@ -36,7 +37,7 @@ public class building : MonoBehaviour
     //ดูตอนตึกโดนตึก
     public float timeDelay = 0f;
     public bool hit = false;
-
+    
     [System.Obsolete]
     private void Start()
     {
@@ -124,7 +125,7 @@ public class building : MonoBehaviour
                 }
                 initialized = true;
             }
-
+            
             //ขยับซ้ายขวา
             switch (startType)
             {
@@ -222,6 +223,7 @@ public class building : MonoBehaviour
                             hit = false;
                             gamePlay.BuildingCount++;
                             gamePlay.PerfectCount++;
+                            gamePlay.Block++;
                         }
                     }
                 }
@@ -251,7 +253,7 @@ public class building : MonoBehaviour
                         hit = false;
                         gamePlay.BuildingCount++;
                         gamePlay.PerfectCount++;
-
+                        gamePlay.Block++;
                         //+ความเร็วถ้าเข้า Endless
                         if (isEndless)
                         {
@@ -283,6 +285,7 @@ public class building : MonoBehaviour
                             Destroy(this);
                             hit = false;
                             gamePlay.BuildingCount++;
+                            gamePlay.Block++;
                             gamePlay.PerfectCount++;
 
                             //+ความเร็วถ้าเข้า Endless
@@ -362,6 +365,12 @@ public class building : MonoBehaviour
             gamePlay.Life -= 1;
             gamePlay.HasBuilding = false;
             gamePlay.PerfectCount = 0;
+            CustomEvent buyEvent = new CustomEvent("DobedoEvent")
+            {
+                { "Block", gamePlay.Block }
+            };
+            AnalyticsService.Instance.RecordEvent(buyEvent);
+            gamePlay.Block = 0;
         }
     }
 

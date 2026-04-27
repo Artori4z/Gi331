@@ -38,6 +38,7 @@ public class GamePlay : MonoBehaviour
     bool moveUpOne = true;
     bool moveUpTwo = true;
     float fixedZ;
+    public int Block = 0;
 
     //Bg
     [SerializeField] Material[] Sky;
@@ -138,7 +139,7 @@ public class GamePlay : MonoBehaviour
         }
 
         //กดจอวางตึก (เรื่องตก/แรง นับใน building.cs แล้ว)
-        if (Input.touchCount > 0 && HasBuilding)
+        if (Input.touchCount > 0 || Input.GetKeyDown(KeyCode.Space) && HasBuilding)
         {
             IsMoving = true;
         }

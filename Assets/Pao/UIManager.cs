@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.SceneManagement;
+using Unity.Services.Core;
+using Unity.Services.Analytics;
 
 public class UIManager : MonoBehaviour
 {
@@ -20,6 +22,8 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI scoreTextPause;
     public bool Reset;
     public bool Mute;
+    public bool StartLv;
+    public float TimePerLv;
     [Header("Audio")]
     [SerializeField] private AudioSource uiAudioSource;
     [SerializeField] private AudioClip uiOpenClip;
@@ -27,13 +31,35 @@ public class UIManager : MonoBehaviour
     [SerializeField] private AudioClip pauseClip;
     [SerializeField] private AudioClip resumeClip;
 
-    void Start()
+    async void Start()
     {
         MainMenu();
         Reset = false;
         Mute = false;
+        try
+        {
+            await UnityServices.InitializeAsync();
+            AnalyticsService.Instance.StartDataCollection();
+            Debug.Log("Analytics Ready!");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Init Error: " + e.Message);
+        }
     }
-
+    private void FixedUpdate()
+    {
+        TimePerLv += Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            CustomEvent buyEvent = new CustomEvent("DobedoEvent")
+            {
+                { "TimePerLv", TimePerLv }
+            };
+            AnalyticsService.Instance.RecordEvent(buyEvent);
+            Debug.Log("time");
+        }
+    }
     void Update()
     {
         scoreText.text = "Score: " + gameplay.BuildingCount;
@@ -58,6 +84,7 @@ public class UIManager : MonoBehaviour
         {
             comboText.text = "";
         }
+            
     }
 
     public void MainMenu()
@@ -86,7 +113,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 0f;
         gameplay.enabled = false;
         gameplay.IsMoving = false;
-
+        TimePerLv = 0;
         if (pauseClip != null)
             PlayUI(pauseClip);
         else
@@ -104,6 +131,11 @@ public class UIManager : MonoBehaviour
         PlayUI(buttonClickClip);
         gameplay.Reset();
         gameplay.Lv = 1;
+        CustomEvent buyEvent = new CustomEvent("DobedoEvent")
+            {
+                { "FavLevel", 1 }
+            };
+        AnalyticsService.Instance.RecordEvent(buyEvent);
     }
 
     public void SetLvTwo()
@@ -111,6 +143,11 @@ public class UIManager : MonoBehaviour
         PlayUI(buttonClickClip);
         gameplay.Reset();
         gameplay.Lv = 2;
+        CustomEvent buyEvent = new CustomEvent("DobedoEvent")
+            {
+                { "FavLevel", 2 }
+            };
+        AnalyticsService.Instance.RecordEvent(buyEvent);
     }
 
     public void SetLvThree()
@@ -118,6 +155,11 @@ public class UIManager : MonoBehaviour
         PlayUI(buttonClickClip);
         gameplay.Reset();
         gameplay.Lv = 3;
+        CustomEvent buyEvent = new CustomEvent("DobedoEvent")
+            {
+                { "FavLevel", 3 }
+            };
+        AnalyticsService.Instance.RecordEvent(buyEvent);
     }
 
     public void SceneReset()
@@ -131,11 +173,14 @@ public class UIManager : MonoBehaviour
         gameplay.bootsTimer = 0;
         gameplay.Cam.transform.position = new Vector3(0, 61, -110);
         gameplay.JustReset = true;
+        
+        StartLv = false;
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void UnSceneReset()
     {
+        
         Reset = false;
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
